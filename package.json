@@ -1,0 +1,50 @@
+{
+  "name": "integreat-adapter-form",
+  "version": "0.1.0",
+  "description": "application/x-www-form-urlencoded adapter for Integreat",
+  "author": "Kjell-Morten Bratsberg Thorsen <post@kjellmorten.no>",
+  "license": "ISC",
+  "main": "index.js",
+  "types": "index.d.ts",
+  "scripts": {
+    "start": "tsc && node index.js",
+    "test": "tsc && nyc --reporter=text-summary ava",
+    "pretest:watch": "tsc",
+    "test:watch": "tsc --watch & ava --watch",
+    "dev": "npm run test:watch",
+    "build": "tsc",
+    "prepare": "npm run build",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
+    "nyc:report": "nyc report",
+    "lint": "tslint --project tsconfig.json --config tslint.json"
+  },
+  "ava": {
+    "files": [
+      "dist/**/*-test.js",
+      "dist/tests/**/*-test.js",
+      "dist/tests/helpers/*.js"
+    ],
+    "sources": [
+      "dist/**/!(*-test).js",
+      "index.js"
+    ]
+  },
+  "nyc": {
+    "exclude": [
+      "**/*-test.js",
+      "dist/tests/helpers/*.js"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/integreat-io/integreat-adapter-form.git"
+  },
+  "bugs": {
+    "url": "https://github.com/integreat-io/integreat-adapter-form/issues"
+  },
+  "homepage": "https://github.com/integreat-io/integreat-adapter-form#readme",
+  "engines": {
+    "node": ">= 8.6",
+    "npm": ">= 5.4"
+  }
+}
