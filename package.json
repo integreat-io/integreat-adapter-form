@@ -46,5 +46,20 @@
   "engines": {
     "node": ">= 8.6",
     "npm": ">= 5.4"
+  },
+  "dependencies": {
+    "@types/got": "^8.3.1",
+    "got": "^8.3.2"
+  },
+  "devDependencies": {
+    "@types/nock": "^9.3.0",
+    "ava": "^0.25.0",
+    "babel-preset-env": "^1.7.0",
+    "coveralls": "^3.0.2",
+    "nock": "^9.4.1",
+    "nyc": "^12.0.2",
+    "tslint": "^5.10.0",
+    "tslint-config-standard": "^7.1.0",
+    "typescript": "^2.9.2"
   }
 }

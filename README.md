@@ -4,9 +4,11 @@ Adapter that lets
 [Integreat](https://github.com/integreat-io/integreat) send and receive content
 in application/x-www-form-urlencoded encoding.
 
+[![npm Version](https://img.shields.io/npm/v/integreat-adapter-form.svg)](https://www.npmjs.com/package/integreat-adapter-form)
 [![Build Status](https://travis-ci.org/integreat-io/integreat-adapter-form.svg?branch=master)](https://travis-ci.org/integreat-io/integreat-adapter-form)
 [![Coverage Status](https://coveralls.io/repos/github/integreat-io/integreat-adapter-form/badge.svg?branch=master)](https://coveralls.io/github/integreat-io/integreat-adapter-form?branch=master)
 [![Dependencies Status](https://tidelift.com/badges/github/integreat-io/integreat-adapter-form?style=flat)](https://tidelift.com/repo/github/integreat-io/integreat-adapter-form)
+[![Maintainability](https://api.codeclimate.com/v1/badges/6331723a6ff61de5f232/maintainability)](https://codeclimate.com/github/integreat-io/integreat-adapter-form/maintainability)
 
 ## Getting started
 
@@ -28,14 +30,11 @@ const integreat = require('integreat')
 const formAdapter = require('integreat-adapter-form')
 const defs = require('./config')
 
-const resources = formAdapter(integreat.resources())
+const resources = integreat.resources(formAdapter)
 const great = integreat(defs, resources)
 
 // ... and then dispatch actions as usual
 ```
-
-The `formAdapter()` function adds the adapter `form` to the resources object,
-but you still need to configure your source to use it.
 
 Example source configuration:
 
