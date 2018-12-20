@@ -1,7 +1,7 @@
 import { GotFn } from 'got'
-import { IRequest } from '../../types/IRequest'
+import { Request } from '../types'
 
-const send = (got: GotFn) => async (request: IRequest) => {
+const send = (got: GotFn) => async (request: Request) => {
   return {}
 }
 

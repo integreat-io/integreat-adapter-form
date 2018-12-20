@@ -1,17 +1,17 @@
 {
   "name": "integreat-adapter-form",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "application/x-www-form-urlencoded adapter for Integreat",
   "author": "Kjell-Morten Bratsberg Thorsen <post@kjellmorten.no>",
   "license": "ISC",
-  "main": "index.js",
-  "types": "index.d.ts",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "scripts": {
-    "start": "tsc && node index.js",
-    "test": "tsc && nyc --reporter=text-summary ava",
-    "pretest:watch": "tsc",
-    "test:watch": "tsc --watch & ava --watch",
-    "dev": "npm run test:watch",
+    "start": "tsc && node dist/index.js",
+    "test": "tsc && nyc --reporter=text-summary ava dist/**/*.test.js",
+    "test:watch": "npm run dev",
+    "test:inspect": "node --inspect node_modules/ava/profile.js",
+    "dev": "ava --watch",
     "build": "tsc",
     "prepare": "npm run build",
     "coverage": "nyc report --reporter=text-lcov | coveralls",
@@ -19,20 +19,24 @@
     "lint": "tslint --project tsconfig.json --config tslint.json"
   },
   "ava": {
+    "compileEnhancements": false,
+    "extensions": [
+      "ts"
+    ],
+    "require": [
+      "ts-node/register/transpile-only"
+    ],
     "files": [
-      "dist/**/*-test.js",
-      "dist/tests/**/*-test.js",
-      "dist/tests/helpers/*.js"
+      "src/**/*.test.ts"
     ],
     "sources": [
-      "dist/**/!(*-test).js",
-      "index.js"
+      "src/**/!(*.test).ts"
     ]
   },
   "nyc": {
     "exclude": [
-      "**/*-test.js",
-      "dist/tests/helpers/*.js"
+      "**/*.test.js",
+      "**/*.test.ts"
     ]
   },
   "repository": {
@@ -48,18 +52,19 @@
     "npm": ">= 5.4"
   },
   "dependencies": {
-    "@types/got": "^8.3.1",
-    "got": "^8.3.2"
+    "@types/got": "^9.2.2",
+    "got": "^9.5.0"
   },
   "devDependencies": {
     "@types/nock": "^9.3.0",
-    "ava": "^0.25.0",
+    "ava": "^1.0.1",
     "babel-preset-env": "^1.7.0",
     "coveralls": "^3.0.2",
-    "nock": "^9.4.1",
-    "nyc": "^12.0.2",
-    "tslint": "^5.10.0",
-    "tslint-config-standard": "^7.1.0",
-    "typescript": "^2.9.2"
+    "nock": "^10.0.4",
+    "nyc": "^13.1.0",
+    "ts-node": "^7.0.1",
+    "tslint": "^5.11.0",
+    "tslint-config-standard": "^8.0.1",
+    "typescript": "^3.2.2"
   }
 }
