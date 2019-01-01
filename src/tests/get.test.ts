@@ -1,7 +1,8 @@
 import test from 'ava'
 import nock = require('nock')
 
-import adapter from '../adapter'
+import resources from '..'
+const { form: adapter } = resources.adapters
 
 // Helpers
 

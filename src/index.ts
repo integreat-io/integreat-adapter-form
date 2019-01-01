@@ -1,5 +1,12 @@
-import adapter from './adapter'
+import form from './adapter'
 
-export default {
-  adapter
+const adapters = {
+  form
+}
+
+export = {
+  adapters,
+  default: {
+    adapters
+  }
 }
