@@ -20,7 +20,8 @@ test('should GET from uri', async (t) => {
   t.is(got.callCount, 1)
   t.is(got.args[0][0], 'http://form.com/theform')
   const callOptions = got.args[0][1]
-  t.is(callOptions.method, 'GET')
+  t.is(callOptions.method, 'GET'),
+  t.deepEqual(callOptions.headers, {})
 })
 
 test('should use POST when request data is set', async (t) => {
@@ -34,6 +35,9 @@ test('should use POST when request data is set', async (t) => {
     status: 'ok',
     data: 'key=value'
   }
+  const expectedHeaders = {
+    'Content-Type': 'application/x-www-form-urlencoded'
+  }
 
   const ret = await send(got)(request)
 
@@ -42,6 +46,7 @@ test('should use POST when request data is set', async (t) => {
   t.is(got.args[0][0], 'http://form.com/theform')
   const callOptions = got.args[0][1]
   t.is(callOptions.method, 'POST')
+  t.deepEqual(callOptions.headers, expectedHeaders)
 })
 
 test('should return error when no uri or endpoint', async (t) => {

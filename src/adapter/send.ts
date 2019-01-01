@@ -7,7 +7,9 @@ const send = (got: GotFn) => async (request: Request) => {
     return { status: 'error', error: 'Request has no endpoint or uri' }
   }
   const method = (data) ? 'POST' : 'GET'
-  const headers = {}
+  const headers = (method === 'POST')
+    ? { 'Content-Type': 'application/x-www-form-urlencoded' }
+    : {}
   const { uri } = endpoint
 
   const response = await got(uri, {
