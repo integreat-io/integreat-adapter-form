@@ -36,7 +36,7 @@ test('should use POST when request data is set', async (t) => {
     data: 'key=value'
   }
   const expectedHeaders = {
-    'Content-Type': 'application/x-www-form-urlencoded'
+    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
   }
 
   const ret = await send(got)(request)

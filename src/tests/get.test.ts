@@ -51,3 +51,24 @@ test('should return notfound on 404', async (t) => {
 
   t.is(ret.status, 'notfound')
 })
+
+test('should return body data on error', async (t) => {
+  nock('http://test.com')
+    .get('/error')
+    .reply(400, 'error=There+was+an+error')
+  const request = {
+    method: 'QUERY',
+    endpoint: {
+      uri: 'http://test.com/error'
+    }
+  }
+  const expectedData = {
+    error: 'There was an error'
+  }
+
+  const response = await adapter.send(request)
+  const ret = await adapter.normalize(response, request)
+
+  t.is(ret.status, 'error')
+  t.deepEqual(ret.data, expectedData)
+})
