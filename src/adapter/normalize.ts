@@ -1,4 +1,4 @@
-import { Response, Request } from '../types'
+import { Response, Request } from '.'
 
 const parseObject = (value: string) => {
   try {

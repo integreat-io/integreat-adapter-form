@@ -1,4 +1,4 @@
-import { Request, RequestData } from '../types'
+import { Request, RequestData } from '.'
 
 interface Dictionary {
   [key: string]: string | number | null | undefined
