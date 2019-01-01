@@ -1,7 +1,7 @@
 import test from 'ava'
 import sinon = require('sinon')
 
-import send from './send'
+import send, { HttpError } from './send'
 
 test('should GET from uri', async (t) => {
   const got = sinon.stub().resolves({ body: 'key=value' })
@@ -56,4 +56,49 @@ test('should return error when no uri or endpoint', async (t) => {
   const ret = await send(got)(request)
 
   t.is(ret.status, 'error')
+})
+
+test('should return notfound on 404', async (t) => {
+  const notFoundError = new Error('Response code 404 (Not Found)') as HttpError
+  notFoundError.statusCode = 404
+  const got = sinon.stub().rejects(notFoundError)
+  const request = {
+    method: 'QUERY',
+    endpoint: { uri: 'http://form.com/unknown' }
+  }
+
+  const ret = await send(got)(request)
+
+  t.is(ret.status, 'notfound')
+  t.is(typeof ret.error, 'string')
+})
+
+test('should return noaccess on 401', async (t) => {
+  const noAccessError = new Error('Response code 401 (No Access)') as HttpError
+  noAccessError.statusCode = 401
+  const got = sinon.stub().rejects(noAccessError)
+  const request = {
+    method: 'QUERY',
+    endpoint: { uri: 'http://form.com/secured' }
+  }
+
+  const ret = await send(got)(request)
+
+  t.is(ret.status, 'noaccess')
+  t.is(typeof ret.error, 'string')
+})
+
+test('should return error on all other errors', async (t) => {
+  const noAccessError = new Error('Response code 500 (Server Error)') as HttpError
+  noAccessError.statusCode = 500
+  const got = sinon.stub().rejects(noAccessError)
+  const request = {
+    method: 'QUERY',
+    endpoint: { uri: 'http://form.com/error' }
+  }
+
+  const ret = await send(got)(request)
+
+  t.is(ret.status, 'error')
+  t.is(typeof ret.error, 'string')
 })

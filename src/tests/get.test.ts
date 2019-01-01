@@ -34,3 +34,20 @@ test('should get data', async (t) => {
   t.is(ret.status, 'ok')
   t.deepEqual(ret.data, expectedData)
 })
+
+test('should return notfound on 404', async (t) => {
+  nock('http://test.com')
+    .get('/notknown')
+    .reply(404)
+  const request = {
+    method: 'QUERY',
+    endpoint: {
+      uri: 'http://test.com/notknown'
+    }
+  }
+
+  const response = await adapter.send(request)
+  const ret = await adapter.normalize(response, request)
+
+  t.is(ret.status, 'notfound')
+})
