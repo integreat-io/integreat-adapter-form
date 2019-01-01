@@ -1,5 +1,5 @@
 import test from 'ava'
-import * as nock from 'nock'
+import nock = require('nock')
 
 import adapter from '../adapter'
 
@@ -11,28 +11,26 @@ test.after.always(() => {
 
 // Tests
 
-test.failing('should get data', async (t) => {
+test('should get data', async (t) => {
   const formResponse = 'value=1&text=Several+words+here&object=%7B%22id%22%3A%22ent1%22%2C%22type%22%3A%22entry%22%7D'
   nock('http://test.com')
     .get('/form')
     .reply(200, formResponse)
-  const action = {
-    type: 'GET',
-    payload: {
-      type: 'entry',
-      id: 'ent1'
+  const request = {
+    method: 'QUERY',
+    endpoint: {
+      uri: 'http://test.com/form'
     }
   }
-  const endpoint = {
-    uri: 'http://test.com/form'
-  }
-  const expected = {
+  const expectedData = {
     value: 1,
     text: 'Several words here',
     object: { id: 'ent1', type: 'entry' }
   }
 
-  const ret = await adapter.send({ action, endpoint })
+  const response = await adapter.send(request)
+  const ret = await adapter.normalize(response, request)
 
-  t.deepEqual(ret, expected)
+  t.is(ret.status, 'ok')
+  t.deepEqual(ret.data, expectedData)
 })

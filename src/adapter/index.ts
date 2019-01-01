@@ -1,6 +1,7 @@
-import * as got from 'got'
-import send from './send'
+import got = require('got')
 import { Adapter } from '../types'
+import send from './send'
+import normalize from './normalize'
 
 const adapter: Adapter = {
   authentication: 'asHttpHeaders',
@@ -8,7 +9,7 @@ const adapter: Adapter = {
   connect: async (_serviceOptions, _auth, _connection) => null,
   serialize: async (request) => request,
   send: send(got),
-  normalize: async (response, _request) => response,
+  normalize,
   disconnect: async (_connection: {} | null) => {}
 }
 
