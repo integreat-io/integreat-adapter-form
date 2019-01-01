@@ -42,11 +42,8 @@ Example source configuration:
 {
   id: 'store',
   adapter: 'form',
-  options: {
-    baseUri: 'https://yoursite/with/form'
-  },
   endpoints: [
-    {options: {uri: '/the-form'}}
+    { options: { uri: 'https://api.com/accepting/form' } }
   ]
 }
 ```

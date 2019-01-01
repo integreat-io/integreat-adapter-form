@@ -30,24 +30,17 @@ export interface EndpointOptions {
 export interface ServiceOptions {
 }
 
-export interface Adapter {
-  authentication: string,
-  prepareEndpoint: (endpointOptions: EndpointOptions, serviceOptions?: ServiceOptions) => EndpointOptions,
-  connect: (_serviceOptions: ServiceOptions, auth: {}, connection: {} | null) => Promise<{} | null>,
-  serialize: (request: Request) => Promise<Request>,
-  send: (request: Request) => Promise<Response>,
-  normalize: (response: Response, request: Request) => Promise<Response>,
-  disconnect: (_connection: {} | null) => Promise<void>
-}
-
-const adapter: Adapter = {
+export default {
   authentication: 'asHttpHeaders',
-  prepareEndpoint: (endpointOptions, _serviceOptions) => endpointOptions,
-  connect: async (_serviceOptions, _auth, _connection) => null,
+
+  prepareEndpoint: (endpointOptions: EndpointOptions, _serviceOptions?: ServiceOptions) => endpointOptions,
+
+  connect: async (_serviceOptions: ServiceOptions, _auth: object | null, _connection: object | null) => null,
   serialize,
+
   send: send(got),
+
   normalize,
+
   disconnect: async (_connection: {} | null) => { return }
 }
-
-export default adapter
