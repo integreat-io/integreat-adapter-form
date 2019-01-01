@@ -27,14 +27,6 @@ test('should return null as connection', async (t) => {
   t.is(ret, null)
 })
 
-test('should have minimal serialize implementation', async (t) => {
-  const request = { method: 'QUERY', endpoint: { uri: '' } }
-
-  const ret = await adapter.serialize(request)
-
-  t.is(ret, request)
-})
-
 test('should do nothing when callling disconnect', async (t) => {
   const ret = await adapter.disconnect(null)
 

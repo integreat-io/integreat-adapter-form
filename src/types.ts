@@ -1,4 +1,4 @@
-type DataProperty = string | number | boolean | Date
+export type DataProperty = string | number | boolean | Date | object
 
 interface Attributes {
   [key: string]: DataProperty | DataProperty[]
@@ -23,9 +23,11 @@ export type Data = {
   relationships: Relationships
 }
 
+export type RequestData = Data | Data[] | DataProperty | null
+
 export interface Request {
   method: string,
-  data?: Data | Data[] | DataProperty | null,
+  data?: RequestData,
   endpoint?: EndpointOptions
 }
 

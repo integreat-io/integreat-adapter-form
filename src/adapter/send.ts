@@ -2,17 +2,17 @@ import { GotFn } from 'got'
 import { Request } from '../types'
 
 const send = (got: GotFn) => async (request: Request) => {
-  const { endpoint } = request
+  const { endpoint, data } = request
   if (!endpoint || !endpoint.uri) {
     return { status: 'error', error: 'Request has no endpoint or uri' }
   }
-  const method = 'GET'
+  const method = (data) ? 'POST' : 'GET'
   const headers = {}
   const { uri } = endpoint
 
   const response = await got(uri, {
     method,
-    // body,
+    body: data as string,
     headers
   })
 
