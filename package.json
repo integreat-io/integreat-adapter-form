@@ -1,6 +1,6 @@
 {
   "name": "integreat-adapter-form",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "application/x-www-form-urlencoded adapter for Integreat",
   "author": "Kjell-Morten Bratsberg Thorsen <post@kjellmorten.no>",
   "license": "ISC",
