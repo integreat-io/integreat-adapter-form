@@ -13,20 +13,19 @@ test.after.always(() => {
 // Tests
 
 test('should get data', async (t) => {
-  const formResponse = 'value=1&text=Several+words+here&object=%7B%22id%22%3A%22ent1%22%2C%22type%22%3A%22entry%22%7D'
-  nock('http://test.com')
-    .get('/form')
-    .reply(200, formResponse)
+  const formResponse =
+    'value=1&text=Several+words+here&object=%7B%22id%22%3A%22ent1%22%2C%22type%22%3A%22entry%22%7D'
+  nock('http://test.com').get('/form').reply(200, formResponse)
   const request = {
     method: 'QUERY',
     endpoint: {
-      uri: 'http://test.com/form'
-    }
+      uri: 'http://test.com/form',
+    },
   }
   const expectedData = {
     value: 1,
     text: 'Several words here',
-    object: { id: 'ent1', type: 'entry' }
+    object: { id: 'ent1', type: 'entry' },
   }
 
   const response = await adapter.send(request)
@@ -37,14 +36,12 @@ test('should get data', async (t) => {
 })
 
 test('should return notfound on 404', async (t) => {
-  nock('http://test.com')
-    .get('/notknown')
-    .reply(404)
+  nock('http://test.com').get('/notknown').reply(404)
   const request = {
     method: 'QUERY',
     endpoint: {
-      uri: 'http://test.com/notknown'
-    }
+      uri: 'http://test.com/notknown',
+    },
   }
 
   const response = await adapter.send(request)
@@ -54,17 +51,15 @@ test('should return notfound on 404', async (t) => {
 })
 
 test('should return body data on error', async (t) => {
-  nock('http://test.com')
-    .get('/error')
-    .reply(400, 'error=There+was+an+error')
+  nock('http://test.com').get('/error').reply(400, 'error=There+was+an+error')
   const request = {
     method: 'QUERY',
     endpoint: {
-      uri: 'http://test.com/error'
-    }
+      uri: 'http://test.com/error',
+    },
   }
   const expectedData = {
-    error: 'There was an error'
+    error: 'There was an error',
   }
 
   const response = await adapter.send(request)

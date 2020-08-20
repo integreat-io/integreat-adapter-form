@@ -3,7 +3,7 @@ import send from './send'
 import serialize from './serialize'
 import normalize from './normalize'
 
-type DataProperty = string | number | boolean | object
+export type DataProperty = string | number | boolean | Record<string, unknown>
 
 interface Data {
   [key: string]: DataProperty
@@ -12,14 +12,14 @@ interface Data {
 export type RequestData = Data | Data[] | DataProperty | null
 
 export interface Request {
-  method: string,
-  data?: RequestData,
+  method: string
+  data?: RequestData
   endpoint?: EndpointOptions
 }
 
 export interface Response {
-  status: string,
-  data?: any,
+  status: string
+  data?: unknown
   error?: string
 }
 
@@ -27,20 +27,31 @@ export interface EndpointOptions {
   uri: string
 }
 
-export interface ServiceOptions {
-}
+export type ServiceOptions = Record<string, unknown>
 
 export default {
   authentication: 'asHttpHeaders',
 
-  prepareEndpoint: (endpointOptions: EndpointOptions, _serviceOptions?: ServiceOptions) => endpointOptions,
+  prepareEndpoint: (
+    endpointOptions: EndpointOptions,
+    _serviceOptions?: ServiceOptions
+  ): EndpointOptions => endpointOptions,
 
-  connect: async (_serviceOptions: ServiceOptions, _auth: object | null, _connection: object | null) => null,
+  connect: async (
+    _serviceOptions: ServiceOptions,
+    _auth: Record<string, unknown> | null,
+    _connection: Record<string, unknown> | null
+  ): Promise<Record<string, unknown> | null> => null,
+
   serialize,
 
-  send: send(got),
+  send: send((got as unknown) as got.GotRequestFunction),
 
   normalize,
 
-  disconnect: async (_connection: {} | null) => { return }
+  disconnect: async (
+    _connection: Record<string, unknown> | null
+  ): Promise<void> => {
+    return
+  },
 }
