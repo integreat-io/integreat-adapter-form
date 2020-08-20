@@ -6,7 +6,7 @@ import send from './send'
 test('should GET from uri', async (t) => {
   const got = sinon.stub().resolves({ statusCode: 200, body: 'key=value' })
   const request = {
-    method: 'QUERY',
+    method: 'GET',
     endpoint: { uri: 'http://form.com/theform' },
   }
   const expected = {
@@ -20,13 +20,14 @@ test('should GET from uri', async (t) => {
   t.is(got.callCount, 1)
   t.is(got.args[0][0], 'http://form.com/theform')
   const callOptions = got.args[0][1]
-  t.is(callOptions.method, 'GET'), t.deepEqual(callOptions.headers, {})
+  t.is(callOptions.method, 'GET')
+  t.deepEqual(callOptions.headers, {})
 })
 
 test('should use POST when request data is set', async (t) => {
   const got = sinon.stub().resolves({ statusCode: 200, body: 'key=value' })
   const request = {
-    method: 'MUTATION',
+    method: 'SET',
     data: { value: 1, text: 'Some text' },
     endpoint: { uri: 'http://form.com/theform' },
   }
@@ -48,9 +49,29 @@ test('should use POST when request data is set', async (t) => {
   t.deepEqual(callOptions.headers, expectedHeaders)
 })
 
+test('should include request headers', async (t) => {
+  const got = sinon.stub().resolves({ statusCode: 200, body: 'key=value' })
+  const request = {
+    method: 'SET',
+    data: { value: 1, text: 'Some text' },
+    headers: { Authorization: 'Basic Y2xpZW50MTpzM2NyM3Q=' },
+    endpoint: { uri: 'http://form.com/theform' },
+  }
+  const expectedHeaders = {
+    Authorization: 'Basic Y2xpZW50MTpzM2NyM3Q=',
+    'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
+  }
+
+  await send(got)(request)
+
+  t.is(got.callCount, 1)
+  const callOptions = got.args[0][1]
+  t.deepEqual(callOptions.headers, expectedHeaders)
+})
+
 test('should return error when no uri or endpoint', async (t) => {
   const got = sinon.stub().resolves({ statusCode: 200, body: 'key=value' })
-  const request = { method: 'QUERY' }
+  const request = { method: 'GET' }
 
   const ret = await send(got)(request)
 
@@ -63,7 +84,7 @@ test('should return notfound on 404', async (t) => {
     statusMessage: 'Response code 404 (Not Found)',
   })
   const request = {
-    method: 'QUERY',
+    method: 'GET',
     endpoint: { uri: 'http://form.com/unknown' },
   }
 
@@ -79,7 +100,7 @@ test('should return noaccess on 401', async (t) => {
     statusMessage: 'Response code 401 (No Access)',
   })
   const request = {
-    method: 'QUERY',
+    method: 'GET',
     endpoint: { uri: 'http://form.com/secured' },
   }
 
@@ -95,7 +116,7 @@ test('should return error on all other errors', async (t) => {
     statusMessage: 'Response code 500 (Server Error)',
   })
   const request = {
-    method: 'QUERY',
+    method: 'GET',
     endpoint: { uri: 'http://form.com/error' },
   }
 

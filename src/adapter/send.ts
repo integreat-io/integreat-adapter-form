@@ -35,19 +35,21 @@ const isEndpointWithUri = (endpoint?: Endpoint | null): endpoint is Endpoint =>
 
 export default (got: GotRequestFunction) =>
   async function send(request: Request): Promise<Response> {
-    const { endpoint, data } = request
+    const { endpoint, data, headers } = request
 
     if (!isEndpointWithUri(endpoint)) {
       return { status: 'error', error: 'Request has no endpoint or uri' }
     }
 
     const method = resolveMethod(data)
-    const headers = generateHeaders(method)
 
     const response = await got(endpoint.uri, {
       method,
       body: data as string,
-      headers,
+      headers: {
+        ...generateHeaders(method),
+        ...headers,
+      },
       throwHttpErrors: false,
     })
 

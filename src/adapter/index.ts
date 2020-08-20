@@ -15,6 +15,7 @@ export interface Request {
   method: string
   data?: RequestData
   endpoint?: EndpointOptions
+  headers?: Record<string, string>
 }
 
 export interface Response {
