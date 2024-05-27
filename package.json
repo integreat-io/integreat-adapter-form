@@ -4,17 +4,32 @@
   "description": "application/x-www-form-urlencoded adapter for Integreat",
   "author": "Kjell-Morten Bratsberg Thorsen <post@kjellmorten.no>",
   "license": "ISC",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "keywords": [
+    "urlencoded",
+    "form",
+    "x-www-form-urlencoded",
+    "integreat"
+  ],
+  "type": "module",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./transformer.js": {
+      "import": "./dist/transformer.js",
+      "types": "./dist/transformer.d.ts"
+    }
+  },
   "scripts": {
-    "test": "npm run build && nyc --reporter=text-summary ava --config ./ava-dist.config.js",
-    "test:inspect": "node --inspect node_modules/ava/profile.js",
+    "test": "npm run build && c8 --reporter=text-summary ava --config ./ava-dist.config.js",
     "test:watch": "npm run dev",
     "dev": "ava --watch",
     "build": "tsc",
-    "coverage": "nyc report --reporter=text-lcov | coveralls",
-    "nyc:report": "nyc report --reporter=text --reporter=html",
-    "lint": "eslint --ext .ts src"
+    "prepublish": "npm run build",
+    "coverage": "c8 report",
+    "lint": "eslint --ext .ts src",
+    "verify": "npm run lint && npm test"
   },
   "repository": {
     "type": "git",
@@ -25,15 +40,15 @@
   },
   "homepage": "https://github.com/integreat-io/integreat-adapter-form#readme",
   "engines": {
-    "node": ">= 10"
+    "node": ">= 18"
   },
   "dependencies": {
-    "got": "^11.5.2"
+    "got": "^14.3.0"
   },
   "devDependencies": {
-    "@integreat/ts-dev-setup": "^1.0.1",
-    "@types/sinon": "^9.0.4",
-    "nock": "^13.0.4",
-    "sinon": "^9.0.3"
+    "@integreat/ts-dev-setup": "^6.0.2",
+    "@types/sinon": "^17.0.3",
+    "nock": "^13.5.4",
+    "sinon": "^18.0.0"
   }
 }
