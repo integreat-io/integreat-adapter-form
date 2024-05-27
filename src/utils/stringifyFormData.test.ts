@@ -67,6 +67,18 @@ test('should serialize keys with empty values', (t) => {
   t.is(ret, expected)
 })
 
+test('should serialize date', (t) => {
+  const data = {
+    value: 1,
+    date: new Date('2024-05-11T18:43:11+02:00'),
+  }
+  const expected = 'value=1&date=2024-05-11T16%3A43%3A11.000Z'
+
+  const ret = stringifyFormData(data)
+
+  t.is(ret, expected)
+})
+
 test('should return undefined when not an object', (t) => {
   const data = null
   const expected = undefined

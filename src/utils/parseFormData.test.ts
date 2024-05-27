@@ -39,6 +39,18 @@ test('should normalize form data with objects', (t) => {
   t.deepEqual(ret, expected)
 })
 
+test('should keep date string as string', (t) => {
+  const data = 'value=1&date=2024-05-11T16%3A43%3A11.000Z'
+  const expected = {
+    value: 1,
+    date: '2024-05-11T16:43:11.000Z',
+  }
+
+  const ret = parseFormData(data)
+
+  t.deepEqual(ret, expected)
+})
+
 test('should treat key without value as having undefined value', (t) => {
   const data = 'key'
   const expected = { key: undefined }
