@@ -58,6 +58,32 @@ Data in payload and response will be application/x-www-form-urlencoded encoded
 when sending _to_ a service, and decoded back to JS data coming _from_ a
 service.
 
+The adapter has no options.
+
+### Form transformer
+
+The package also includes a transformer, that works exactly like the adapter,
+except it is intended for use in mutation pipelines with
+`{ $transform: 'form' }`. You may use it like this:
+
+Example of use:
+
+```javascript
+import integreat from 'integreat'
+import httpTransporter from 'integreat-transporter-http'
+import formTransformer from 'integreat-adapter-form/transformer.js'
+import defs from './config.js'
+
+const great = Integreat.create(defs, {
+  transporters: { http: httpTransporter },
+  transformers: { form: formTransformer },
+})
+
+// In a mutation pipeline:
+
+const mutation = ['response.data', { $transform: 'form' }]
+```
+
 ### Running the tests
 
 The tests can be run with `npm test`.
