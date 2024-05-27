@@ -42,13 +42,9 @@
   "engines": {
     "node": ">= 18"
   },
-  "dependencies": {
-    "got": "^14.3.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@integreat/ts-dev-setup": "^6.0.2",
-    "@types/sinon": "^17.0.3",
-    "nock": "^13.5.4",
-    "sinon": "^18.0.0"
+    "integreat": "^1.5.9"
   }
 }

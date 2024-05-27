@@ -5,15 +5,13 @@ Adapter that lets
 in application/x-www-form-urlencoded encoding.
 
 [![npm Version](https://img.shields.io/npm/v/integreat-adapter-form.svg)](https://www.npmjs.com/package/integreat-adapter-form)
-[![Build Status](https://travis-ci.org/integreat-io/integreat-adapter-form.svg?branch=master)](https://travis-ci.org/integreat-io/integreat-adapter-form)
-[![Coverage Status](https://coveralls.io/repos/github/integreat-io/integreat-adapter-form/badge.svg?branch=master)](https://coveralls.io/github/integreat-io/integreat-adapter-form?branch=master)
 [![Maintainability](https://api.codeclimate.com/v1/badges/6331723a6ff61de5f232/maintainability)](https://codeclimate.com/github/integreat-io/integreat-adapter-form/maintainability)
 
 ## Getting started
 
 ### Prerequisits
 
-Requires node v10 and Integreat v0.7.
+Requires node v18 and Integreat v1.0.
 
 ### Installing and using
 
@@ -26,30 +24,39 @@ npm install integreat-adapter-form
 Example of use:
 
 ```javascript
-const integreat = require('integreat')
-const formAdapter = require('integreat-adapter-form')
-const defs = require('./config')
+import Integreat from 'integreat'
+import httpTransporter from 'integreat-transporter-http'
+import formAdapter from 'integreat-adapter-form'
+import defs from './config.js'
 
-const resources = integreat.resources(formAdapter)
-const great = integreat(defs, resources)
+const great = Integreat.create(defs, {
+  transporters: { http: httpTransporter },
+  adapters: { form: formAdapter },
+})
 
 // ... and then dispatch actions as usual
 ```
 
-Example source configuration:
+Example service configuration:
 
 ```javascript
 {
   id: 'store',
-  adapter: 'form',
+  transporter: 'http',
+  adapters: ['form'],
+  options: {
+    includeHeaders: true
+  },
   endpoints: [
-    { options: { uri: 'https://api.com/accepting/form' } }
+    { options: { uri: 'https://api.com/formDataEndpoint' } }
   ]
 }
 ```
 
-Data will be sent with application/x-www-form-urlencoded encoding [as described
-in the W3C Forms specification]](https://www.w3.org/TR/html401/interact/forms.html#didx-applicationx-www-form-urlencoded).
+Data in payload and response will be application/x-www-form-urlencoded encoded
+[as described in the W3C Forms specification](https://www.w3.org/TR/html401/interact/forms.html#didx-applicationx-www-form-urlencoded)
+when sending _to_ a service, and decoded back to JS data coming _from_ a
+service.
 
 ### Running the tests
 
