@@ -29,6 +29,30 @@ test('should serialize uri', (t) => {
   t.is(ret, expected)
 })
 
+test('should serialize line break', (t) => {
+  const data = {
+    value: 1,
+    text: 'Several words\nhere\nand here',
+  }
+  const expected = 'value=1&text=Several+words%0D%0Ahere%0D%0Aand+here'
+
+  const ret = stringifyFormData(data)
+
+  t.is(ret, expected)
+})
+
+test('should serialize carriage return and line break', (t) => {
+  const data = {
+    value: 1,
+    text: 'Several words\r\nhere\r\nand here',
+  }
+  const expected = 'value=1&text=Several+words%0D%0Ahere%0D%0Aand+here'
+
+  const ret = stringifyFormData(data)
+
+  t.is(ret, expected)
+})
+
 test('should serialize array to several keys with bracket postfix', (t) => {
   const data = {
     value: 1,

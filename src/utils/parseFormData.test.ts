@@ -25,6 +25,18 @@ test('should normalize one pair', (t) => {
   t.deepEqual(ret, expected)
 })
 
+test('should normalize line break', (t) => {
+  const data = 'value=1&text=Several+words%0D%0Ahere%0D%0Aand+here'
+  const expected = {
+    value: 1,
+    text: 'Several words\nhere\nand here',
+  }
+
+  const ret = parseFormData(data)
+
+  t.deepEqual(ret, expected)
+})
+
 test('should normalize keys with bracket postfix into array', (t) => {
   const data = 'value=1&lines[]=Several+words&lines[]=on+several&lines[]=lines'
   const expected = {

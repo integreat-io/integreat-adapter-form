@@ -6,9 +6,11 @@ const parseObject = (value: string) => {
   }
 }
 
+const fixLineBreak = (value: string) => value.replace(/%0D%0A/g, '%0A')
+
 const parseValue = (value?: string) =>
   typeof value === 'string'
-    ? parseObject(decodeURIComponent(value).replace(/\+/g, ' '))
+    ? parseObject(decodeURIComponent(fixLineBreak(value)).replace(/\+/g, ' '))
     : undefined
 
 function reducePair(

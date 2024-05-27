@@ -7,8 +7,11 @@ const formatObject = (value: unknown) =>
       ? value.toISOString()
       : String(value)
 
+const fixLineBreak = (value: unknown) =>
+  typeof value === 'string' ? value.replace(/(^|[^\r])\n/g, '$1\r\n') : value
+
 const formatValue = (value: unknown) =>
-  encodeURIComponent(formatObject(value)).replace(/%20/g, '+')
+  encodeURIComponent(formatObject(fixLineBreak(value))).replace(/%20/g, '+')
 
 function mapEntry([key, value]: [string, unknown]) {
   if (Array.isArray(value)) {
