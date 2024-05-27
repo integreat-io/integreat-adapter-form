@@ -29,6 +29,31 @@ test('should serialize uri', (t) => {
   t.is(ret, expected)
 })
 
+test('should serialize array to several keys with bracket postfix', (t) => {
+  const data = {
+    value: 1,
+    lines: ['Several words', 'on several', 'lines'],
+  }
+  const expected =
+    'value=1&lines[]=Several+words&lines[]=on+several&lines[]=lines'
+
+  const ret = stringifyFormData(data)
+
+  t.is(ret, expected)
+})
+
+test('should serialize array with one item to key with bracket postfix', (t) => {
+  const data = {
+    value: 1,
+    lines: ['Several words'],
+  }
+  const expected = 'value=1&lines[]=Several+words'
+
+  const ret = stringifyFormData(data)
+
+  t.is(ret, expected)
+})
+
 test('should serialize object', (t) => {
   const data = {
     value: 1,

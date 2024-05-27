@@ -25,6 +25,30 @@ test('should normalize one pair', (t) => {
   t.deepEqual(ret, expected)
 })
 
+test('should normalize keys with bracket postfix into array', (t) => {
+  const data = 'value=1&lines[]=Several+words&lines[]=on+several&lines[]=lines'
+  const expected = {
+    value: 1,
+    lines: ['Several words', 'on several', 'lines'],
+  }
+
+  const ret = parseFormData(data)
+
+  t.deepEqual(ret, expected)
+})
+
+test('should normalize one key with bracket postfix into array', (t) => {
+  const data = 'value=1&lines[]=Several+words'
+  const expected = {
+    value: 1,
+    lines: ['Several words'],
+  }
+
+  const ret = parseFormData(data)
+
+  t.deepEqual(ret, expected)
+})
+
 test('should normalize form data with objects', (t) => {
   const data =
     'value=1&text=Several+words+here&object=%7B%22id%22%3A%22ent1%22%2C%22type%22%3A%22entry%22%7D'

@@ -58,6 +58,11 @@ Data in payload and response will be application/x-www-form-urlencoded encoded
 when sending _to_ a service, and decoded back to JS data coming _from_ a
 service.
 
+Arrays are serialized to several keys postfixed with brackets `'[]'`. When
+normalizing keys postfixed with brackets, the brackets are removed and the value
+of all keys with the same name, are joined into one array in the order they
+appear.
+
 The adapter has no options.
 
 ### Form transformer
