@@ -1,10 +1,11 @@
-import test from 'ava'
+import test from 'node:test'
+import assert from 'node:assert/strict'
 
 import stringifyFormData from './stringifyFormData.js'
 
 // Tests
 
-test('should serialize simple data object', (t) => {
+test('should serialize simple data object', () => {
   const data = {
     value: 1,
     text: 'Several words here',
@@ -13,10 +14,10 @@ test('should serialize simple data object', (t) => {
 
   const ret = stringifyFormData(data)
 
-  t.is(ret, expected)
+  assert.equal(ret, expected)
 })
 
-test('should serialize uri', (t) => {
+test('should serialize uri', () => {
   const data = {
     value: 1,
     redirect_uri: 'http://redirect.com/to/this.html',
@@ -26,10 +27,10 @@ test('should serialize uri', (t) => {
 
   const ret = stringifyFormData(data)
 
-  t.is(ret, expected)
+  assert.equal(ret, expected)
 })
 
-test('should serialize line break', (t) => {
+test('should serialize line break', () => {
   const data = {
     value: 1,
     text: 'Several words\nhere\nand here',
@@ -38,10 +39,10 @@ test('should serialize line break', (t) => {
 
   const ret = stringifyFormData(data)
 
-  t.is(ret, expected)
+  assert.equal(ret, expected)
 })
 
-test('should serialize carriage return and line break', (t) => {
+test('should serialize carriage return and line break', () => {
   const data = {
     value: 1,
     text: 'Several words\r\nhere\r\nand here',
@@ -50,10 +51,10 @@ test('should serialize carriage return and line break', (t) => {
 
   const ret = stringifyFormData(data)
 
-  t.is(ret, expected)
+  assert.equal(ret, expected)
 })
 
-test('should serialize array to several keys with bracket postfix', (t) => {
+test('should serialize array to several keys with bracket postfix', () => {
   const data = {
     value: 1,
     lines: ['Several words', 'on several', 'lines'],
@@ -63,10 +64,10 @@ test('should serialize array to several keys with bracket postfix', (t) => {
 
   const ret = stringifyFormData(data)
 
-  t.is(ret, expected)
+  assert.equal(ret, expected)
 })
 
-test('should serialize array with one item to key with bracket postfix', (t) => {
+test('should serialize array with one item to key with bracket postfix', () => {
   const data = {
     value: 1,
     lines: ['Several words'],
@@ -75,10 +76,10 @@ test('should serialize array with one item to key with bracket postfix', (t) => 
 
   const ret = stringifyFormData(data)
 
-  t.is(ret, expected)
+  assert.equal(ret, expected)
 })
 
-test('should serialize object', (t) => {
+test('should serialize object', () => {
   const data = {
     value: 1,
     object: { id: 'ent1', type: 'entry' },
@@ -88,10 +89,10 @@ test('should serialize object', (t) => {
 
   const ret = stringifyFormData(data)
 
-  t.is(ret, expected)
+  assert.equal(ret, expected)
 })
 
-test('should serialize object with one key', (t) => {
+test('should serialize object with one key', () => {
   const data = {
     text: 'Several words here',
   }
@@ -99,10 +100,10 @@ test('should serialize object with one key', (t) => {
 
   const ret = stringifyFormData(data)
 
-  t.is(ret, expected)
+  assert.equal(ret, expected)
 })
 
-test('should serialize keys with empty values', (t) => {
+test('should serialize keys with empty values', () => {
   const data = {
     none: undefined,
     nil: null,
@@ -113,10 +114,10 @@ test('should serialize keys with empty values', (t) => {
 
   const ret = stringifyFormData(data)
 
-  t.is(ret, expected)
+  assert.equal(ret, expected)
 })
 
-test('should serialize date', (t) => {
+test('should serialize date', () => {
   const data = {
     value: 1,
     date: new Date('2024-05-11T18:43:11+02:00'),
@@ -125,14 +126,14 @@ test('should serialize date', (t) => {
 
   const ret = stringifyFormData(data)
 
-  t.is(ret, expected)
+  assert.equal(ret, expected)
 })
 
-test('should return undefined when not an object', (t) => {
+test('should return undefined when not an object', () => {
   const data = null
   const expected = undefined
 
   const ret = stringifyFormData(data)
 
-  t.is(ret, expected)
+  assert.equal(ret, expected)
 })

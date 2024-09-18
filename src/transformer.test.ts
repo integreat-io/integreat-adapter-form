@@ -1,4 +1,5 @@
-import test from 'ava'
+import test from 'node:test'
+import assert from 'node:assert/strict'
 
 import transformer from './transformer.js'
 
@@ -21,7 +22,7 @@ const stateRev = {
 
 // Tests -- from service
 
-test('should parse as form from a service', (t) => {
+test('should parse as form from a service', () => {
   const data = 'value=1&text=Several+words+here'
   const expected = {
     value: 1,
@@ -30,10 +31,10 @@ test('should parse as form from a service', (t) => {
 
   const ret = transformer(operands)(options)(data, state)
 
-  t.deepEqual(ret, expected)
+  assert.deepEqual(ret, expected)
 })
 
-test('should parse an array of form data from a service', (t) => {
+test('should parse an array of form data from a service', () => {
   const data = [
     'value=1&text=Several+words+here',
     'value=2&text=And+even+more+here',
@@ -51,10 +52,10 @@ test('should parse an array of form data from a service', (t) => {
 
   const ret = transformer(operands)(options)(data, state)
 
-  t.deepEqual(ret, expected)
+  assert.deepEqual(ret, expected)
 })
 
-test('should return undefined when data is not a string', (t) => {
+test('should return undefined when data is not a string', () => {
   const data = {
     value: 1,
     text: 'Several words here',
@@ -63,12 +64,12 @@ test('should return undefined when data is not a string', (t) => {
 
   const ret = transformer(operands)(options)(data, state)
 
-  t.is(ret, expected)
+  assert.equal(ret, expected)
 })
 
 // Tests -- to service
 
-test('should stringify as form to a service', (t) => {
+test('should stringify as form to a service', () => {
   const data = {
     value: 1,
     text: 'Several words here',
@@ -77,10 +78,10 @@ test('should stringify as form to a service', (t) => {
 
   const ret = transformer(operands)(options)(data, stateRev)
 
-  t.deepEqual(ret, expected)
+  assert.deepEqual(ret, expected)
 })
 
-test('should stringify an array of to a service', (t) => {
+test('should stringify an array of to a service', () => {
   const data = [
     {
       value: 1,
@@ -98,14 +99,14 @@ test('should stringify an array of to a service', (t) => {
 
   const ret = transformer(operands)(options)(data, stateRev)
 
-  t.deepEqual(ret, expected)
+  assert.deepEqual(ret, expected)
 })
 
-test('should return undefined when data is not an object', (t) => {
+test('should return undefined when data is not an object', () => {
   const data = 'Not an object'
   const expected = undefined
 
   const ret = transformer(operands)(options)(data, stateRev)
 
-  t.deepEqual(ret, expected)
+  assert.deepEqual(ret, expected)
 })

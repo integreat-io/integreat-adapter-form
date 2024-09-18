@@ -22,11 +22,12 @@
     }
   },
   "scripts": {
-    "test": "npm run build && c8 --reporter=text-summary ava --config ./ava-dist.config.js",
+    "test": "node --import tsx --test --enable-source-maps --experimental-test-coverage --test-reporter node-test-reporter 'src/**/*.test.ts'",
+    "test:legacy": "node --import tsx --no-deprecation --test --enable-source-maps src/*.test.ts src/**/*.test.ts",
     "test:watch": "npm run dev",
-    "dev": "ava --watch",
+    "dev": "node --import tsx --test --enable-source-maps --test-reporter node-test-reporter --watch 'src/**/*.test.ts' || exit 0",
     "build": "tsc",
-    "prepublish": "npm run build",
+    "prepublishOnly": "npm run build",
     "coverage": "c8 report",
     "lint": "eslint --ext .ts src",
     "verify": "npm run lint && npm test"
@@ -46,7 +47,8 @@
     "map-any": "^1.0.0"
   },
   "devDependencies": {
-    "@integreat/ts-dev-setup": "^6.0.2",
-    "integreat": "^1.5.9"
+    "@integreat/ts-dev-setup": "^7.1.1",
+    "@types/node": "^22.5.5",
+    "integreat": "^1.5.10"
   }
 }

@@ -1,10 +1,11 @@
-import test from 'ava'
+import test from 'node:test'
+import assert from 'node:assert/strict'
 
 import parseFormData from './parseFormData.js'
 
 // Tests
 
-test('should normalize simple form data', (t) => {
+test('should normalize simple form data', () => {
   const data = 'value=1&text=Several+words+here'
   const expected = {
     value: 1,
@@ -13,19 +14,19 @@ test('should normalize simple form data', (t) => {
 
   const ret = parseFormData(data)
 
-  t.deepEqual(ret, expected)
+  assert.deepEqual(ret, expected)
 })
 
-test('should normalize one pair', (t) => {
+test('should normalize one pair', () => {
   const data = 'value=1'
   const expected = { value: 1 }
 
   const ret = parseFormData(data)
 
-  t.deepEqual(ret, expected)
+  assert.deepEqual(ret, expected)
 })
 
-test('should normalize line break', (t) => {
+test('should normalize line break', () => {
   const data = 'value=1&text=Several+words%0D%0Ahere%0D%0Aand+here'
   const expected = {
     value: 1,
@@ -34,10 +35,10 @@ test('should normalize line break', (t) => {
 
   const ret = parseFormData(data)
 
-  t.deepEqual(ret, expected)
+  assert.deepEqual(ret, expected)
 })
 
-test('should normalize keys with bracket postfix into array', (t) => {
+test('should normalize keys with bracket postfix into array', () => {
   const data = 'value=1&lines[]=Several+words&lines[]=on+several&lines[]=lines'
   const expected = {
     value: 1,
@@ -46,10 +47,10 @@ test('should normalize keys with bracket postfix into array', (t) => {
 
   const ret = parseFormData(data)
 
-  t.deepEqual(ret, expected)
+  assert.deepEqual(ret, expected)
 })
 
-test('should normalize one key with bracket postfix into array', (t) => {
+test('should normalize one key with bracket postfix into array', () => {
   const data = 'value=1&lines[]=Several+words'
   const expected = {
     value: 1,
@@ -58,10 +59,10 @@ test('should normalize one key with bracket postfix into array', (t) => {
 
   const ret = parseFormData(data)
 
-  t.deepEqual(ret, expected)
+  assert.deepEqual(ret, expected)
 })
 
-test('should normalize form data with objects', (t) => {
+test('should normalize form data with objects', () => {
   const data =
     'value=1&text=Several+words+here&object=%7B%22id%22%3A%22ent1%22%2C%22type%22%3A%22entry%22%7D'
   const expected = {
@@ -72,10 +73,10 @@ test('should normalize form data with objects', (t) => {
 
   const ret = parseFormData(data)
 
-  t.deepEqual(ret, expected)
+  assert.deepEqual(ret, expected)
 })
 
-test('should keep date string as string', (t) => {
+test('should keep date string as string', () => {
   const data = 'value=1&date=2024-05-11T16%3A43%3A11.000Z'
   const expected = {
     value: 1,
@@ -84,23 +85,23 @@ test('should keep date string as string', (t) => {
 
   const ret = parseFormData(data)
 
-  t.deepEqual(ret, expected)
+  assert.deepEqual(ret, expected)
 })
 
-test('should treat key without value as having undefined value', (t) => {
+test('should treat key without value as having undefined value', () => {
   const data = 'key'
   const expected = { key: undefined }
 
   const ret = parseFormData(data)
 
-  t.deepEqual(ret, expected)
+  assert.deepEqual(ret, expected)
 })
 
-test('should return undefined when not a string', (t) => {
+test('should return undefined when not a string', () => {
   const data = null
   const expected = undefined
 
   const ret = parseFormData(data)
 
-  t.deepEqual(ret, expected)
+  assert.deepEqual(ret, expected)
 })

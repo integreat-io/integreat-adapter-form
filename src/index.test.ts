@@ -1,4 +1,5 @@
-import test from 'ava'
+import test from 'node:test'
+import assert from 'node:assert/strict'
 
 import adapter from './index.js'
 
@@ -8,28 +9,28 @@ const options = {}
 
 // Tests
 
-test('should be an Integreat adapter', (t) => {
-  t.truthy(adapter)
-  t.is(typeof adapter.prepareOptions, 'function')
-  t.is(typeof adapter.normalize, 'function')
-  t.is(typeof adapter.serialize, 'function')
+test('should be an Integreat adapter', () => {
+  assert(adapter)
+  assert.equal(typeof adapter.prepareOptions, 'function')
+  assert.equal(typeof adapter.normalize, 'function')
+  assert.equal(typeof adapter.serialize, 'function')
 })
 
 // Tests -- prepareOptions
 
-test('should prepare options', (t) => {
+test('should prepare options', () => {
   const options = { dontKnow: 'whatthisis' }
   const serviceId = 'entries'
   const expected = {}
 
   const ret = adapter.prepareOptions(options, serviceId)
 
-  t.deepEqual(ret, expected)
+  assert.deepEqual(ret, expected)
 })
 
 // Tests -- normalize
 
-test('should normalize payload data', async (t) => {
+test('should normalize payload data', async () => {
   const action = {
     type: 'SET',
     payload: { type: 'entry', data: 'value=1&text=Several+words+here' },
@@ -49,10 +50,10 @@ test('should normalize payload data', async (t) => {
 
   const ret = await adapter.normalize(action, options)
 
-  t.deepEqual(ret, expected)
+  assert.deepEqual(ret, expected)
 })
 
-test('should normalize response data', async (t) => {
+test('should normalize response data', async () => {
   const action = {
     type: 'GET',
     payload: { type: 'entry' },
@@ -77,12 +78,12 @@ test('should normalize response data', async (t) => {
 
   const ret = await adapter.normalize(action, options)
 
-  t.deepEqual(ret, expected)
+  assert.deepEqual(ret, expected)
 })
 
 // Tests -- serialize
 
-test('should serialize payload', async (t) => {
+test('should serialize payload', async () => {
   const action = {
     type: 'SET',
     payload: {
@@ -99,10 +100,10 @@ test('should serialize payload', async (t) => {
 
   const ret = await adapter.serialize(action, options)
 
-  t.deepEqual(ret, expected)
+  assert.deepEqual(ret, expected)
 })
 
-test('should serialize response', async (t) => {
+test('should serialize response', async () => {
   const action = {
     type: 'SET',
     payload: { type: 'entry' },
@@ -121,10 +122,10 @@ test('should serialize response', async (t) => {
 
   const ret = await adapter.serialize(action, options)
 
-  t.deepEqual(ret, expected)
+  assert.deepEqual(ret, expected)
 })
 
-test('should serialize first item when data is an array', async (t) => {
+test('should serialize first item when data is an array', async () => {
   const action = {
     type: 'SET',
     payload: {
@@ -152,5 +153,5 @@ test('should serialize first item when data is an array', async (t) => {
 
   const ret = await adapter.serialize(action, options)
 
-  t.deepEqual(ret, expected)
+  assert.deepEqual(ret, expected)
 })
