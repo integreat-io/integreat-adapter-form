@@ -3,12 +3,21 @@ import parseFormData from './utils/parseFormData.js'
 import stringifyFormData from './utils/stringifyFormData.js'
 import type { Transformer } from 'integreat'
 
-const transformer: Transformer = () => () =>
-  function transformer(data, state) {
-    return mapAny(
-      (data) => (state.rev ? stringifyFormData(data) : parseFormData(data)),
-      data,
-    )
-  }
+export interface Props {
+  setStructureInKeys?: boolean
+}
+
+const transformer: Transformer =
+  ({ setStructureInKeys = false }: Props) =>
+  () =>
+    function transformer(data, state) {
+      return mapAny(
+        (data) =>
+          state.rev
+            ? stringifyFormData(data, setStructureInKeys)
+            : parseFormData(data),
+        data,
+      )
+    }
 
 export default transformer
