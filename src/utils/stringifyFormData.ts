@@ -13,19 +13,38 @@ const fixLineBreak = (value: unknown) =>
 const formatValue = (value: unknown) =>
   encodeURIComponent(formatObject(fixLineBreak(value))).replace(/%20/g, '+')
 
-function mapEntry([key, value]: [string, unknown]) {
-  if (Array.isArray(value)) {
-    // Return one key (with bracket postfix) for each value in an array
-    return value.map((val) => `${key}[]=${formatValue(val)}`)
+const formatKeyValue = (key: string, value: unknown) =>
+  value === undefined ? key : `${key}=${formatValue(value)}`
+
+function moveStructureToKeys([key, value]: [string, unknown]):
+  | string
+  | string[] {
+  if (Array.isArray(value) || isObject(value)) {
+    return Object.entries(value).flatMap(([k, v]) =>
+      moveStructureToKeys([`${key}[${k}]`, v]),
+    )
   } else {
-    // Format a single value
-    return value === undefined ? key : `${key}=${formatValue(value)}`
+    return formatKeyValue(key, value)
   }
 }
 
-export default function stringifyFormData(data?: unknown) {
+function mapEntry([key, value]: [string, unknown]) {
+  if (Array.isArray(value)) {
+    // Return one key (with bracket postfix) for each value in an array
+    return value.map((val) => formatKeyValue(`${key}[]`, val))
+  } else {
+    // Format a single value
+    return formatKeyValue(key, value)
+  }
+}
+
+export default function stringifyFormData(
+  data?: unknown,
+  setStructureInKeys = false,
+) {
   if (isObject(data)) {
-    return Object.entries(data).flatMap(mapEntry).join('&')
+    const fn = setStructureInKeys ? moveStructureToKeys : mapEntry
+    return Object.entries(data).flatMap(fn).join('&')
   } else {
     return undefined
   }

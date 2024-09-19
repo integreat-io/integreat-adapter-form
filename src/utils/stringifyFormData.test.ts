@@ -92,6 +92,56 @@ test('should serialize object', () => {
   assert.equal(ret, expected)
 })
 
+test('should serialize object when setStructureInKeys is true', () => {
+  const setStructureInKeys = true
+  const data = {
+    value: 1,
+    object: { id: 'ent1', type: 'entry' },
+  }
+  const expected = 'value=1&object[id]=ent1&object[type]=entry'
+
+  const ret = stringifyFormData(data, setStructureInKeys)
+
+  assert.equal(ret, expected)
+})
+
+test('should serialize array of objects when setStructureInKeys is true', () => {
+  const setStructureInKeys = true
+  const data = {
+    value: 1,
+    array: [
+      { id: 'ent1', type: 'entry' },
+      { id: 'ent2', type: 'entry' },
+    ],
+  }
+  const expected =
+    'value=1&array[0][id]=ent1&array[0][type]=entry&array[1][id]=ent2&array[1][type]=entry'
+
+  const ret = stringifyFormData(data, setStructureInKeys)
+
+  assert.equal(ret, expected)
+})
+
+test('should serialize array and objects over several levels when setStructureInKeys is true', () => {
+  const setStructureInKeys = true
+  const data = {
+    value: 1,
+    object: {
+      array: [
+        { id: 'ent1', type: 'entry', tags: ['news', 'politics'] },
+        { id: 'ent2', type: 'entry', tags: ['sports'] },
+      ],
+    },
+    empty: undefined,
+  }
+  const expected =
+    'value=1&object[array][0][id]=ent1&object[array][0][type]=entry&object[array][0][tags][0]=news&object[array][0][tags][1]=politics&object[array][1][id]=ent2&object[array][1][type]=entry&object[array][1][tags][0]=sports&empty'
+
+  const ret = stringifyFormData(data, setStructureInKeys)
+
+  assert.equal(ret, expected)
+})
+
 test('should serialize object with one key', () => {
   const data = {
     text: 'Several words here',

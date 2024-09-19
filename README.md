@@ -63,7 +63,13 @@ normalizing keys postfixed with brackets, the brackets are removed and the value
 of all keys with the same name, are joined into one array in the order they
 appear.
 
-The adapter has no options.
+Available options:
+- `setStructureInKeys`: When this is `true`, we'll serialize key and values so
+  that the structure of value is set in the key, with the leaf values as
+  values. `{ data: [{ id: 'ent1 }] }` will for instance be serialized to the
+  key `data[0][id]` and the value `'ent1'`. Default behavior (or when
+  `setStructureInKeys` is `false`) is to use the first level as key (`data` in
+  this case, and JSON stringify the rest as value.
 
 ### Form transformer
 

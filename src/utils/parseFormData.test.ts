@@ -76,6 +76,37 @@ test('should normalize form data with objects', () => {
   assert.deepEqual(ret, expected)
 })
 
+test('should normalize keys with structure', () => {
+  const data = 'value=1&object[id]=ent1&object[type]=entry'
+  const expected = {
+    value: 1,
+    object: { id: 'ent1', type: 'entry' },
+  }
+
+  const ret = parseFormData(data)
+
+  assert.deepEqual(ret, expected)
+})
+
+test('should normalize keys with structure with many levels', () => {
+  const data =
+    'value=1&object[array][0][id]=ent1&object[array][0][type]=entry&object[array][0][tags][0]=news&object[array][0][tags][1]=politics&object[array][1][id]=ent2&object[array][1][type]=entry&object[array][1][tags][0]=sports&empty'
+  const expected = {
+    value: 1,
+    object: {
+      array: [
+        { id: 'ent1', type: 'entry', tags: ['news', 'politics'] },
+        { id: 'ent2', type: 'entry', tags: ['sports'] },
+      ],
+    },
+    empty: undefined,
+  }
+
+  const ret = parseFormData(data)
+
+  assert.deepEqual(ret, expected)
+})
+
 test('should keep date string as string', () => {
   const data = 'value=1&date=2024-05-11T16%3A43%3A11.000Z'
   const expected = {

@@ -1,3 +1,5 @@
+import { isObject } from './is.js'
+
 const parseObject = (value: string) => {
   try {
     return JSON.parse(value)
@@ -13,21 +15,56 @@ const parseValue = (value?: string) =>
     ? parseObject(decodeURIComponent(fixLineBreak(value)).replace(/\+/g, ' '))
     : undefined
 
-function reducePair(
-  obj: Record<string, unknown>,
-  [key, value]: [string, string | undefined],
-) {
-  if (key.endsWith('[]')) {
-    // When key ends in brackets, we have an array. This may be one of several
-    // keys with items for the array, so combine them.
-    const actualKey = key.slice(0, key.length - 2)
-    const existingValue = obj[actualKey] // eslint-disable-line security/detect-object-injection
-    const existingArray = Array.isArray(existingValue) ? existingValue : []
-    return { ...obj, [actualKey]: [...existingArray, parseValue(value)] }
-  } else {
-    // Parse a single value.
-    return { ...obj, [key]: parseValue(value) }
+function prepareKeyPart(part: string) {
+  if (part === ']') {
+    return ''
   }
+  const num = Number.parseInt(part, 10)
+  return Number.isNaN(num)
+    ? part.endsWith(']')
+      ? part.slice(0, -1)
+      : part
+    : num
+}
+
+function parseKey(key: string): (string | number)[] {
+  return key.split('[').map(prepareKeyPart)
+}
+
+function ensureArray(value: unknown): unknown[] {
+  return Array.isArray(value) ? value : value === undefined ? [] : [value]
+}
+
+function ensureObject(value: unknown): Record<string, unknown> {
+  return isObject(value) ? value : {}
+}
+
+function setOnTarget(
+  target: unknown,
+  keys: (string | number)[],
+  value: string | undefined,
+) {
+  const [key, ...restKeys] = keys
+  const isArr = key === '' || typeof key === 'number'
+  const currentTarget = isArr ? ensureArray(target) : ensureObject(target)
+  const nextTarget =
+    key === '' ? undefined : currentTarget[key as keyof typeof currentTarget]
+  const nextValue =
+    restKeys.length === 0 ? value : setOnTarget(nextTarget, restKeys, value)
+  if (key === '') {
+    ;(currentTarget as unknown[]).push(nextValue)
+  } else {
+    ;(currentTarget as unknown[])[key as number] = nextValue // This handles both arrays and object, but we have forced the typing to array, just to satisfy TS without writing extra logic.
+  }
+  return currentTarget
+}
+
+function reducePair(
+  target: unknown,
+  [key, value]: [string, string | undefined],
+): unknown[] | Record<string, unknown> {
+  const keys = parseKey(key)
+  return setOnTarget(target, keys, parseValue(value))
 }
 
 export default function parseFormData(data: unknown) {
@@ -35,7 +72,7 @@ export default function parseFormData(data: unknown) {
     return data
       .split('&')
       .map((pair) => pair.split('=') as [string, string | undefined])
-      .reduce(reducePair, {})
+      .reduce(reducePair, undefined)
   } else {
     return undefined
   }
