@@ -13,7 +13,7 @@ const fixLineBreak = (value: string) => value.replace(/%0D%0A/g, '%0A')
 const parseValue = (value?: string) =>
   typeof value === 'string'
     ? parseObject(decodeURIComponent(fixLineBreak(value)).replace(/\+/g, ' '))
-    : undefined
+    : ''
 
 function prepareKeyPart(part: string) {
   if (part === ']') {

@@ -135,7 +135,7 @@ test('should serialize array and objects over several levels when setStructureIn
     empty: undefined,
   }
   const expected =
-    'value=1&object[array][0][id]=ent1&object[array][0][type]=entry&object[array][0][tags][0]=news&object[array][0][tags][1]=politics&object[array][1][id]=ent2&object[array][1][type]=entry&object[array][1][tags][0]=sports&empty'
+    'value=1&object[array][0][id]=ent1&object[array][0][type]=entry&object[array][0][tags][0]=news&object[array][0][tags][1]=politics&object[array][1][id]=ent2&object[array][1][type]=entry&object[array][1][tags][0]=sports'
 
   const ret = stringifyFormData(data, setStructureInKeys)
 
@@ -160,7 +160,7 @@ test('should serialize keys with empty values', () => {
     empty: '',
     zero: 0,
   }
-  const expected = 'none&nil=null&empty=&zero=0'
+  const expected = 'nil=null&empty=&zero=0'
 
   const ret = stringifyFormData(data)
 

@@ -99,7 +99,7 @@ test('should normalize keys with structure with many levels', () => {
         { id: 'ent2', type: 'entry', tags: ['sports'] },
       ],
     },
-    empty: undefined,
+    empty: '',
   }
 
   const ret = parseFormData(data)
@@ -119,9 +119,9 @@ test('should keep date string as string', () => {
   assert.deepEqual(ret, expected)
 })
 
-test('should treat key without value as having undefined value', () => {
+test('should treat key without value as having empty string value', () => {
   const data = 'key'
-  const expected = { key: undefined }
+  const expected = { key: '' }
 
   const ret = parseFormData(data)
 

@@ -14,7 +14,7 @@ const formatValue = (value: unknown) =>
   encodeURIComponent(formatObject(fixLineBreak(value))).replace(/%20/g, '+')
 
 const formatKeyValue = (key: string, value: unknown) =>
-  value === undefined ? key : `${key}=${formatValue(value)}`
+  value === undefined ? '' : `${key}=${formatValue(value)}`
 
 function moveStructureToKeys([key, value]: [string, unknown]):
   | string
@@ -44,7 +44,7 @@ export default function stringifyFormData(
 ) {
   if (isObject(data)) {
     const fn = setStructureInKeys ? moveStructureToKeys : mapEntry
-    return Object.entries(data).flatMap(fn).join('&')
+    return Object.entries(data).flatMap(fn).filter(Boolean).join('&')
   } else {
     return undefined
   }
