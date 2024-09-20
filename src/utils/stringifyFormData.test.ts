@@ -142,6 +142,21 @@ test('should serialize array and objects over several levels when setStructureIn
   assert.equal(ret, expected)
 })
 
+test('should serialize value with url encode when setStructureInKeys is true', () => {
+  const setStructureInKeys = true
+  const data = {
+    value: 1,
+    content: {
+      title: 'This & that',
+    },
+  }
+  const expected = 'value=1&content[title]=This+%26+that'
+
+  const ret = stringifyFormData(data, setStructureInKeys)
+
+  assert.equal(ret, expected)
+})
+
 test('should serialize object with one key', () => {
   const data = {
     text: 'Several words here',
