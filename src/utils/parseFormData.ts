@@ -3,7 +3,7 @@ import { isObject } from './is.js'
 const parseObject = (value: string) => {
   try {
     return JSON.parse(value)
-  } catch (err) {
+  } catch {
     return value
   }
 }
