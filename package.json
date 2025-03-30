@@ -47,8 +47,8 @@
     "map-any": "^1.0.0"
   },
   "devDependencies": {
-    "@integreat/ts-dev-setup": "^7.1.1",
-    "@types/node": "^22.9.0",
-    "integreat": "^1.5.10"
+    "@integreat/ts-dev-setup": "^7.1.2",
+    "@types/node": "^22.13.14",
+    "integreat": "^1.6.1"
   }
 }
