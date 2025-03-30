@@ -5,7 +5,7 @@ Adapter that lets
 in application/x-www-form-urlencoded encoding.
 
 [![npm Version](https://img.shields.io/npm/v/integreat-adapter-form.svg)](https://www.npmjs.com/package/integreat-adapter-form)
-[![Maintainability](https://api.codeclimate.com/v1/badges/6331723a6ff61de5f232/maintainability)](https://codeclimate.com/github/integreat-io/integreat-adapter-form/maintainability)
+[![Maintainability](https://qlty.sh/badges/345edc80-9da7-4c26-8400-7b5c3c7655d6/maintainability.svg)](https://qlty.sh/gh/integreat-io/projects/integreat-adapter-form)
 
 ## Getting started
 
@@ -64,6 +64,7 @@ of all keys with the same name, are joined into one array in the order they
 appear.
 
 Available options:
+
 - `setStructureInKeys`: When this is `true`, we'll serialize key and values so
   that the structure of value is set in the key, with the leaf values as
   values. `{ data: [{ id: 'ent1 }] }` will for instance be serialized to the
