@@ -39,35 +39,94 @@ function ensureObject(value: unknown): Record<string, unknown> {
   return isObject(value) ? value : {}
 }
 
+/**
+ * Set the given `key` in the target array to the value received by traversing
+ * the rest of the keys.
+ */
+function setOnArray(
+  target: unknown[],
+  key: number | undefined,
+  restKeys: (string | number)[],
+  value: string | undefined,
+): unknown[] {
+  const nextTarget =
+    typeof key === 'number' ? target[key as keyof typeof target] : undefined
+  const nextValue = setOnTarget(nextTarget, restKeys, value)
+  if (typeof key === 'number') {
+    // eslint-disable-next-line security/detect-object-injection
+    target[key] = nextValue
+    return target
+  } else {
+    return [...target, nextValue]
+  }
+}
+
+/**
+ * Set the given `key` on the target object to the value received by traversing
+ * the rest of the keys.
+ */
+function setOnObject(
+  target: Record<string, unknown>,
+  key: string,
+  restKeys: (string | number)[],
+  value: string | undefined,
+): Record<string, unknown> {
+  const nextTarget = target[key as keyof typeof target]
+  const nextValue = setOnTarget(nextTarget, restKeys, value)
+  return { ...target, [key]: nextValue }
+}
+
+/**
+ * Set the next key on the target. Determines whether we are setting an object
+ * or an array and hands off to the correct method.
+ */
 function setOnTarget(
   target: unknown,
   keys: (string | number)[],
   value: string | undefined,
 ) {
+  if (keys.length === 0) {
+    return value
+  }
+
   const [key, ...restKeys] = keys
   const isArr = key === '' || typeof key === 'number'
-  const currentTarget = isArr ? ensureArray(target) : ensureObject(target)
-  const nextTarget =
-    key === '' ? undefined : currentTarget[key as keyof typeof currentTarget]
-  const nextValue =
-    restKeys.length === 0 ? value : setOnTarget(nextTarget, restKeys, value)
-  if (key === '') {
-    ;(currentTarget as unknown[]).push(nextValue)
-  } else {
-    ;(currentTarget as unknown[])[key as number] = nextValue // This handles both arrays and object, but we have forced the typing to array, just to satisfy TS without writing extra logic.
-  }
-  return currentTarget
+  return isArr
+    ? setOnArray(
+        ensureArray(target),
+        key === '' ? undefined : key,
+        restKeys,
+        value,
+      )
+    : setOnObject(ensureObject(target), key, restKeys, value)
 }
 
+/**
+ * Reduce all key/value pairs down to an object.
+ */
 function reducePair(
   target: unknown,
   [key, value]: [string, string | undefined],
-): unknown[] | Record<string, unknown> {
-  const keys = parseKey(key)
-  return setOnTarget(target, keys, parseValue(value))
+): Record<string, unknown> {
+  const [firstKey, ...restKeys] = parseKey(key)
+  if (typeof firstKey === 'string') {
+    return setOnObject(
+      ensureObject(target),
+      firstKey,
+      restKeys,
+      parseValue(value),
+    )
+  } else {
+    return {}
+  }
 }
 
-export default function parseFormData(data: unknown) {
+/**
+ * Split a form data string into keys and values on an object.
+ */
+export default function parseFormData(
+  data: unknown,
+): Record<string, unknown> | undefined {
   if (typeof data === 'string') {
     return data
       .split('&')
